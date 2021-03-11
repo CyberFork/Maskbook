@@ -1,7 +1,7 @@
 import { Component, useCallback, useState, useEffect, useMemo } from 'react'
 import classNames from 'classnames'
 import { makeStyles, createStyles, Card, Typography, Box, Link, Grid, Theme } from '@material-ui/core'
-import { BigNumber } from 'bignumber.js'
+import BigNumber from 'bignumber.js'
 import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
 import { TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { WalletMessages } from '../../Wallet/messages'
@@ -13,7 +13,7 @@ import { useChainId, useChainIdValid } from '../../../web3/hooks/useChainState'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { StyledLinearProgress } from './StyledLinearProgress'
-import { formatAmountPrecision, formatBalance } from '../../Wallet/formatter'
+import { formatBalance } from '../../Wallet/formatter'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { formatDateTime } from '../../../utils/date'
@@ -472,8 +472,8 @@ export function ITO(props: ITO_Props) {
                 </Box>
                 <Typography variant="body2" className={classes.totalText}>
                     {t('plugin_ito_swapped_status', {
-                        remain: formatAmountPrecision(sold, token.decimals),
-                        total: formatAmountPrecision(total, token.decimals),
+                        remain: formatBalance(sold, token.decimals),
+                        total: formatBalance(total, token.decimals),
                         token: token.symbol,
                     })}
                     <Link
@@ -503,8 +503,7 @@ export function ITO(props: ITO_Props) {
                                             .multipliedBy(
                                                 new BigNumber(10).pow(token.decimals - exchange_tokens[i].decimals),
                                             )
-                                            .multipliedBy(new BigNumber(10).pow(exchange_tokens[i].decimals))
-                                            .integerValue(),
+                                            .multipliedBy(new BigNumber(10).pow(exchange_tokens[i].decimals)),
                                         exchange_tokens[i].decimals,
                                     )}
                                     token={token}

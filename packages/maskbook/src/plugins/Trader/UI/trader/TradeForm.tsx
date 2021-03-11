@@ -163,7 +163,7 @@ export function TradeForm(props: TradeFormProps) {
                 <TokenAmountPanel
                     label={inputPanelLabel}
                     amount={inputAmount}
-                    balance={inputTokenBalanceAmount.toFixed()}
+                    balance={inputTokenBalanceAmount.toString()}
                     token={inputToken}
                     onAmountChange={onInputAmountChange}
                     TextFieldProps={{
@@ -191,7 +191,7 @@ export function TradeForm(props: TradeFormProps) {
                 <TokenAmountPanel
                     label={outputPanelLabel}
                     amount={outputAmount}
-                    balance={outputTokenBalanceAmount.toFixed()}
+                    balance={outputTokenBalanceAmount.toString()}
                     token={outputToken}
                     onAmountChange={onOutputAmountChange}
                     MaxChipProps={{ style: { display: 'none' } }}
@@ -232,9 +232,9 @@ export function TradeForm(props: TradeFormProps) {
         loading,
         inputToken,
         outputToken,
-        inputTokenBalanceAmount.toFixed(),
-        inputTokenTradeAmount.toFixed(),
-        outputTokenTradeAmount.toFixed(),
+        inputTokenBalanceAmount.toString(),
+        inputTokenTradeAmount.toString(),
+        outputTokenTradeAmount.toString(),
         trade?.priceImpact,
     ])
     //#endregion
@@ -265,7 +265,7 @@ export function TradeForm(props: TradeFormProps) {
             <div className={classes.section}>
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
-                        amount={approveAmount.toFixed()}
+                        amount={approveAmount.toString()}
                         token={approveToken?.type === EthereumTokenType.ERC20 ? approveToken : undefined}
                         spender={approveAddress}>
                         <ActionButton

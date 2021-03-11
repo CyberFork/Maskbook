@@ -1,8 +1,8 @@
-import { createStyles, makeStyles, Box, TextField, Grid, FormControlLabel, Checkbox } from '@material-ui/core'
+import { createStyles, makeStyles, Box, TextField, FormControlLabel, Checkbox } from '@material-ui/core'
 import { useState, useCallback, useMemo, useEffect, ChangeEvent } from 'react'
 import BigNumber from 'bignumber.js'
+import { sha256 } from 'ethers/lib/utils'
 import { v4 as uuid } from 'uuid'
-import Web3Utils from 'web3-utils'
 import { LocalizationProvider, MobileDateTimePicker } from '@material-ui/lab'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
@@ -145,7 +145,7 @@ export function CreateForm(props: CreateFormProps) {
         onChangePoolSettings({
             isMask,
             // this is the raw password which should be signed by the sender
-            password: Web3Utils.sha3(`${message}`) ?? '',
+            password: sha256(`${message}`) ?? '',
             name: senderName,
             title: message,
             limit: formatAmount(new BigNumber(totalOfPerWallet || '0'), first?.token?.decimals ?? 0),

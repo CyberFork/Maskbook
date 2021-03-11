@@ -1,6 +1,6 @@
 import { ChangeEvent, useMemo, useState, useCallback, useEffect } from 'react'
 import { Send as SendIcon } from 'react-feather'
-import { BigNumber } from 'bignumber.js'
+import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
 import {
     Box,
