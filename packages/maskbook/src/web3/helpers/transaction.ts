@@ -35,6 +35,14 @@ export async function* watchTransaction(
                 continue
             }
 
+            // transaction receipt created
+            if (receipt) {
+                yield {
+                    type: StageType.RECEIPT,
+                    receipt,
+                }
+            }
+
             // transation was mined
             if (receipt.blockNumber) {
                 yield {
