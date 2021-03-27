@@ -6,7 +6,7 @@ export function formatBalance(value: BigNumberish, uint?: string | BigNumberish,
     const [p1, p2] = formatted.split('.')
 
     if (fraction === 0) return p1
-    if (fraction > 0)
-        return p2 ? `${p1}.${p2.slice(0, fraction).padEnd(fraction, '0')}` : `${p1}.${'0'.repeat(fraction)}`
+    if (fraction > 0 && p2) return `${p1}.${p2.slice(0, fraction).padEnd(fraction, '0')}`
+    if (fraction > 0 && !p2) return `${p1}.${'0'.repeat(fraction)}`
     return formatted
 }

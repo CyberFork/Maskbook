@@ -134,8 +134,7 @@ export function DonateDialog(props: DonateDialogProps) {
                 ? [
                       `I just donated ${title} with ${formatBalance(
                           amount,
-                          token.decimals ?? 0,
-                          token.decimals ?? 0,
+                          token.decimals,
                       )} ${cashTag}${token.symbol}. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
                       '#mask_io',
                       postLink,
