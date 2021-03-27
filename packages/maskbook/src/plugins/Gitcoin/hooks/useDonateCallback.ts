@@ -55,7 +55,7 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
 
         // step 1: estimate gas
         const overrides: PayableOverrides = {
-            value: BigNumber.from(token.type === EthereumTokenType.Ether ? amount : 0).toString(),
+            value: BigNumber.from(token.type === EthereumTokenType.Ether ? amount : 0),
         }
         const estimatedGas = await bulkCheckoutContract.estimateGas.donate(donations, overrides).catch((error) => {
             setDonateState({

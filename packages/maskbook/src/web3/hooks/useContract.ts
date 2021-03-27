@@ -11,10 +11,16 @@ import type { TransactionRequest } from '@ethersproject/abstract-provider'
 
 function resolveParameters(...args: any[]) {
     const lastArg = last(args)
-    const overrides =
-        lastArg.nonce || lastArg.gasLimit || lastArg.gasPrice || lastArg.value || lastArg.from || lastArg.blockTag
-            ? lastArg
-            : undefined
+    const overrides = [
+        'gasLimit',
+        'gasPrice',
+        'from',
+        'value',
+        'nonce',
+        'blockTag',
+    ].some(x => lastArg && typeof lastArg === 'object' && lastArg.hasOwnProperty(x))
+        ? lastArg
+        : undefined
     return [overrides ? args.slice(0, args.length - 1) : args, overrides]
 }
 
