@@ -80,6 +80,14 @@ export function useDonateCallback(address: string, amount: string, token?: Ether
                         })
                         resolve(stage.hash)
                         return
+                    case StageType.RECEIPT:
+                    case StageType.CONFIRMATION:
+                        setDonateState({
+                            type: TransactionStateType.HASH,
+                            hash: stage.receipt.transactionHash,
+                        })
+                        resolve(stage.receipt.transactionHash)
+                        return
                     case StageType.ERROR:
                         setDonateState({
                             type: TransactionStateType.FAILED,

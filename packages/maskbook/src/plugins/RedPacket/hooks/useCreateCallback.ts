@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber, CallOverrides } from 'ethers'
 import { sha256 } from 'ethers/lib/utils'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed, StageType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
-import type { TransactionRequest } from '@ethersproject/abstract-provider'
-import Services from '../../../extension/service'
+import { watchTransaction } from '../../../web3/helpers/transaction'
+import { unreachable } from '../../../utils/utils'
 
 export interface RedPacketSettings {
     password: string
@@ -36,10 +36,10 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
         }
 
         // error handling
-        if (new BigNumber(total).isLessThan(shares)) {
+        if (BigNumber.from(total).lt(shares)) {
             setCreateState({
                 type: TransactionStateType.FAILED,
-                error: new Error('At least [number of red packets] tokens to your red packet.'),
+                error: new Error('At least the number of red packets tokens to your red packet.'),
             })
             return
         }
@@ -63,12 +63,21 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        const seed = Math.random().toString()
-        const request: TransactionRequest = {
+        // step 1: estimate gas
+        const estimatedGas = await redPacketContract.estimateGas.create_red_packet(...params).catch((error) => {
+            setCreateState({
+                type: TransactionStateType.FAILED,
+                error,
+            })
+            throw error
+        })
+
+        const overrides: CallOverrides = {
             from: account,
-            to: redPacketContract.address,
-            value: new BigNumber(token.type === EthereumTokenType.Ether ? total : '0').toString(),
+            value: BigNumber.from(token.type === EthereumTokenType.Ether ? total : '0').toString(),
         }
+
+        const seed = Math.random().toString()
         const params: Parameters<typeof redPacketContract['create_red_packet']> = [
             sha256(password)!,
             shares,
@@ -80,22 +89,17 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
             token.type === EthereumTokenType.Ether ? 0 : 1,
             token.type === EthereumTokenType.Ether ? account : token.address, // this field must be a valid address
             total,
+            {
+                ...overrides,
+                gasLimit: estimatedGas,
+            },
         ]
-
-        // step 1: estimate gas
-        const estimatedGas = await redPacketContract.estimateGas.create_red_packet(...params).catch((error) => {
-            setCreateState({
-                type: TransactionStateType.FAILED,
-                error,
-            })
-            throw error
-        })
 
         // step 2: blocking
         return new Promise<void>(async (resolve, reject) => {
             const transaction = await redPacketContract.create_red_packet(...params)
 
-            for await (const stage of Services.Ethereum.watchTransaction(account, transaction)) {
+            for await (const stage of watchTransaction(account, transaction)) {
                 switch (stage.type) {
                     case StageType.TRANSACTION_HASH:
                         setCreateState({
@@ -104,18 +108,11 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
                         })
                         break
                     case StageType.RECEIPT:
-                        setCreateSettings(redPacketSettings)
-                        setCreateState({
-                            type: TransactionStateType.CONFIRMED,
-                            no: 0,
-                            receipt: stage.receipt,
-                        })
-                        break
                     case StageType.CONFIRMATION:
                         setCreateSettings(redPacketSettings)
                         setCreateState({
                             type: TransactionStateType.CONFIRMED,
-                            no: stage.no,
+                            no: stage.type === StageType.RECEIPT ? 0 : stage.no,
                             receipt: stage.receipt,
                         })
                         resolve()
@@ -127,6 +124,8 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings) {
                         })
                         reject(stage.error)
                         break
+                    default:
+                        unreachable(stage)
                 }
             }
         })
