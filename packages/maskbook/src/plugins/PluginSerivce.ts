@@ -9,7 +9,7 @@
 
 // Please make sure you have registered your plugin UI at ./PluginUI
 import './Wallet/messages'
-// import './RedPacket/messages'
+import './RedPacket/messages'
 import './Gitcoin/messages'
 // import './FileService/utils'
 // import './Polls/utils'

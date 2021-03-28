@@ -1,4 +1,4 @@
- import { Wallet } from '@ethersproject/wallet'
+import { Wallet } from '@ethersproject/wallet'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { currentMaskbookChainIdSettings } from '../../../../settings/settings'
 import { getConstant } from '../../../../web3/helpers'

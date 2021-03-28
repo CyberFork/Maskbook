@@ -132,10 +132,9 @@ export function DonateDialog(props: DonateDialogProps) {
         .getShareLinkURL?.(
             token
                 ? [
-                      `I just donated ${title} with ${formatBalance(
-                          amount,
-                          token.decimals,
-                      )} ${cashTag}${token.symbol}. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
+                      `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${
+                          token.symbol
+                      }. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
                       '#mask_io',
                       postLink,
                   ].join('\n')

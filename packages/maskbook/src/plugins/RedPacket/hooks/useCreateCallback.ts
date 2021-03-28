@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
+import { sha256 } from 'ethers/lib/utils'
 import { useRedPacketContract } from '../contracts/useRedPacketContract'
 import { useTransactionState, TransactionStateType } from '../../../web3/hooks/useTransactionState'
 import { ERC20TokenDetailed, EthereumTokenType, EtherTokenDetailed, StageType } from '../../../web3/types'
 import { useAccount } from '../../../web3/hooks/useAccount'
 import type { TransactionRequest } from '@ethersproject/abstract-provider'
-import { sha256 } from 'ethers/lib/utils'
 import Services from '../../../extension/service'
 
 export interface RedPacketSettings {

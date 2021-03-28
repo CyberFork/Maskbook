@@ -9,12 +9,11 @@ export function useAssetsDetailedChain(tokens: (EtherTokenDetailed | ERC20TokenD
             // the length not matched in case of error occurs
             listOfBalance.length === tokens.length
                 ? listOfBalance.map(
-                      (balance: string, idx: number): AssetDetailed =>
-                          ({
-                              chain: 'eth',
-                              token: tokens[idx],
-                              balance,
-                          }),
+                      (balance: string, idx: number): AssetDetailed => ({
+                          chain: 'eth',
+                          token: tokens[idx],
+                          balance,
+                      }),
                   )
                 : [],
         ),
