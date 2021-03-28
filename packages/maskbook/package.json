@@ -77,6 +77,7 @@
     "matrix-js-sdk": "^9.5.1",
     "next-tick": "^1.0.0",
     "notistack": "^1.0.3",
+    "opensea-js": "^1.1.11",
     "promievent": "^0.1.4",
     "pvtsutils": "^1.0.14",
     "qrcode": "^1.4.4",
