@@ -10,7 +10,22 @@ export function useMenu(fragment: ReactElement<{ children: ReactNode }>, anchorS
     const anchorElRef = useRef<HTMLElement>()
     const close = () => setOpen(false)
     return [
-        <ShadowRootMenu open={open} anchorEl={anchorElRef.current} onClose={close} onClick={close}>
+        <ShadowRootMenu
+            PaperProps={{
+                style: {
+                    borderRadius: 4,
+                },
+            }}
+            MenuListProps={{
+                style: {
+                    paddingTop: 0,
+                    paddingBottom: 0,
+                },
+            }}
+            open={open}
+            anchorEl={anchorElRef.current}
+            onClose={close}
+            onClick={close}>
             {fragment.props.children}
         </ShadowRootMenu>,
         useCallback((anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => {
