@@ -14,6 +14,7 @@ export function useMenu(fragment: ReactElement<{ children: ReactNode }>, anchorS
             PaperProps={{
                 style: {
                     borderRadius: 4,
+                    boxShadow: 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px',
                 },
             }}
             MenuListProps={{
